@@ -1,5 +1,6 @@
 import os
 import fitz
+import copy
 
 
 ###
@@ -15,24 +16,34 @@ def getPDFInfo(fileName, folderName):
         # 1ページごとに解析
         for i, page in enumerate(scoreSheet):
             # テキスト抽出
-            getGameInfo(page)
-'''
+            #getGameInfo(page)
+            
+            # ゲーム番号取得
+            gameNum = copy.copy(getGameNum(page))
+            
             # 画像取得
             for j, img in enumerate(page.getImageList()):
-                print("img:", img)
-                x = scoreSheet.extractImage(img[0])
-                name = os.path.join(dirPath, f"{i:04}_{j:02}.{x['ext']}")
-                with open(name, "wb") as ofh:
-                    ofh.write(x['image'])
-'''
+                if j < (len(page.getImageList()) - 2):
+                    x = scoreSheet.extractImage(img[0])
+                    name = os.path.join(dirPath, f"{gameNum[j]}.{x['ext']}")
+                    with open(name, "wb") as ofh:
+                        ofh.write(x['image'])
+
 
 
 
 ###
 ### 対象のPDFのゲーム数の情報を取得する関数
 ###             
-#def getGameNum(page):
-
+def getGameNum(page):
+    gameNumBuf = []
+    for text in enumerate(page.getText('blocks')):
+        buf = text[1][4].splitlines()
+        # ゲーム数の番がある配列の最後を取得
+        if len(buf) == 3:
+            gameNumBuf.append(buf[2])
+    # print("gameNumBuf:", gameNumBuf)
+    return gameNumBuf
 
 ###
 ### ゲーム情報だけを取得する関数
