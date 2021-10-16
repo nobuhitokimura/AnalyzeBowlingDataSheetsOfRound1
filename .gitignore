@@ -2,4 +2,4 @@
 pdfData
 
 # 最初に使ってたPDFのテキスト抽出のソースコード
-analyzePDF.py
+./analyzePDF.py
