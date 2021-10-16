@@ -28,7 +28,7 @@ def get_objs(layout, results):
 
 
 #
-# PDFを開いて解析するための関数
+# PDFのテキストを抽出する関数
 #
 def getPDFtexts(path):
     with open(path, "rb") as f:
@@ -55,5 +55,5 @@ def getPDFtexts(path):
 
 
 getPDFtexts('./pdfData/score_sheet_20210929005339.pdf')
-#main('./pdfData/score_sheet_20210929005432.pdf')
+#getPDFtexts('./pdfData/score_sheet_20210929005432.pdf')
 
