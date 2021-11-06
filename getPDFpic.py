@@ -26,7 +26,8 @@ def getPDFInfo(fileName, folderName):
             for j, img in enumerate(page.getImageList()):
                 if j < (len(page.getImageList()) - 2):
                     x = scoreSheet.extractImage(img[0])
-                    name = os.path.join(dirPath, f"{gameNum[j]}.{x['ext']}")
+                    name = os.path.join(os.getcwd(), folderName, f"{gameNum[j]}.{x['ext']}")
+                    
                     print("name : ", gameNum[j])
                     with open(name, "wb") as ofh:
                         ofh.write(x['image'])
