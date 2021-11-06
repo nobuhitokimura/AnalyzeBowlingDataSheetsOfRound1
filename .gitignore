@@ -1,6 +1,9 @@
 # スコアシートを入れるフォルダ
 pdfData
 
+# pdfから抽出した画像
+pic
+
 # 最初に使ってたPDFのテキスト抽出のソースコード
 analyzePDF.py
 
