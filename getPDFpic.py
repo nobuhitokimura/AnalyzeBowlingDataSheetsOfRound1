@@ -1,6 +1,7 @@
 import os
 import fitz
 import copy
+import re
 
 
 ###
@@ -26,6 +27,7 @@ def getPDFInfo(fileName, folderName):
                 if j < (len(page.getImageList()) - 2):
                     x = scoreSheet.extractImage(img[0])
                     name = os.path.join(dirPath, f"{gameNum[j]}.{x['ext']}")
+                    print("name : ", gameNum[j])
                     with open(name, "wb") as ofh:
                         ofh.write(x['image'])
 
@@ -33,16 +35,23 @@ def getPDFInfo(fileName, folderName):
 
 
 ###
-### 対象のPDFのゲーム数の情報を取得する関数
+### 対象のPDFの日時とゲーム数の情報を取得する関数
 ###             
 def getGameNum(page):
     gameNumBuf = []
+    dateBuf = ""
+    gameBuf = ""
     for text in enumerate(page.getText('blocks')):
+        # 日時を取得
+        if text[0] % 4 == 1 and '（' in text[1][4]:
+            getDate = re.split('[/|（|）|:|\n]', text[1][4])
+            dateBuf = str(getDate[0]) + "-" + str(getDate[1]) + "-" + str(getDate[2]) + "_" + str(getDate[4]) + "-" + str(getDate[5])
+        
+        # ゲーム数の番がある配列の最後を取得, 保存するpng名を生成
         buf = text[1][4].splitlines()
-        # ゲーム数の番がある配列の最後を取得
         if len(buf) == 3:
-            gameNumBuf.append(buf[2])
-    # print("gameNumBuf:", gameNumBuf)
+            gameBuf = str(re.split('[第|ゲーム]', buf[2])[1])
+            gameNumBuf.append(dateBuf + "_" + gameBuf)
     return gameNumBuf
 
 ###
@@ -51,9 +60,6 @@ def getGameNum(page):
 def getGameInfo(page):
     for text in enumerate(page.getText('blocks')):
         buf = text[1][4].splitlines()
-        #print('---')
-        #print('文字数:{}, {}'.format(len(text[1][4]), text[1][4]))
-        #print('文字数:{}, {}'.format(len(buf[0]), buf[0]))
 
         if (len(buf) > 1) or ((len(text[1][4]) - len(buf[0])) > 0):
             if "Powered" not in buf[0]:
@@ -62,4 +68,5 @@ def getGameInfo(page):
 # -----------------------------------------------------------------
 
 getPDFInfo('./pdfData/score_sheet_20210929005339.pdf', 'pic')
-#getPDFInfo('./pdfData/score_sheet_20210929005432.pdf')
+getPDFInfo('./pdfData/score_sheet_20210929005407.pdf', 'pic')
+getPDFInfo('./pdfData/score_sheet_20210929005432.pdf', 'pic')
