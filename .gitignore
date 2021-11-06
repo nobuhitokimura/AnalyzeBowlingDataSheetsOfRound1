@@ -3,3 +3,9 @@ pdfData
 
 # 最初に使ってたPDFのテキスト抽出のソースコード
 analyzePDF.py
+
+# 2値化した画像
+threshImg.png
+
+# 各カウントのPng画像
+cntCharPng
