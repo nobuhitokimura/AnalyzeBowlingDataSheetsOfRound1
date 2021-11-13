@@ -8,7 +8,7 @@ import itertools
 # 各カウントマークのPng情報
 cntCharName = []       # 各マークの名前
 cntCharPngDic = {}     # 各マークのPng配列
-cntCharPngPath = "./cntCharPng"
+cntCharPngPath = "../cntCharPng"
 
 # ゲームのpng画像があるフォルダパス
 picPath = "./pic"

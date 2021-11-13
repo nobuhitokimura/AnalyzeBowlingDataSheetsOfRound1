@@ -68,6 +68,6 @@ def getGameInfo(page):
 
 # -----------------------------------------------------------------
 
-getPDFInfo('./pdfData/score_sheet_20210929005339.pdf', 'pic')
-getPDFInfo('./pdfData/score_sheet_20210929005407.pdf', 'pic')
-getPDFInfo('./pdfData/score_sheet_20210929005432.pdf', 'pic')
+getPDFInfo('../pdfData/score_sheet_20210929005339.pdf', 'pic')
+getPDFInfo('../pdfData/score_sheet_20210929005407.pdf', 'pic')
+getPDFInfo('../pdfData/score_sheet_20210929005432.pdf', 'pic')
