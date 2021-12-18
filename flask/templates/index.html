@@ -13,13 +13,9 @@
         <p>{{ message }}</p>
 
         <form action="/" method="POST" enctype="multipart/form-data">
-            <select name="sel">
-                <option value="null" disabled selected>選択してください</option>
-                <option value="Python">Python</option>
-                <option value="Node">Node</option>
-                <option value="TS">TS</option>
-                <option value="JS">JS</option>
-            </select>
+            <div>
+                <input type="file" name="pdf" accept="application/pdf" required>
+            </div>
             <div>
                 <input type="submit" value="送信">
             </div>
