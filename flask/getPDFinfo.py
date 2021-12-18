@@ -33,8 +33,6 @@ def getPDFInfo(fileName):
                         continue
 
                     textBuf = text[4]
-                    print("----------")
-                    print(j, textBuf)
                     # 日時
                     if textCnt == 0:
                         infoDic['year'] = textBuf[0:4]
@@ -54,25 +52,16 @@ def getPDFInfo(fileName):
                         infoDic['gamenum'] = re.split('[第|ゲーム]', textSl[2])[1]
 
                     textCnt += 1
-            
-            print(infoList)
 
             # 画像取得
-            for j, img in enumerate(page.getImageList()):
-                if j < (len(page.getImageList()) - 2):
-                    x = scoreSheet.extractImage(img[0])
+            for j, img in enumerate(page.get_images()):
+                if j < (len(page.get_images()) - 2):
+                    x = scoreSheet.extract_image(img[0])
                     picPath = os.path.join(pdfPicPath, f"{infoList[j]['gamenum']}.{x['ext']}")
                     
                     with open(picPath, "wb") as ofh:
                         ofh.write(x['image'])
 
+            return infoList
 
-# -----------------------------------------------------------------
-
-
-#fileName = "score_sheet_20211218161724.pdf"
-fileName = "score_sheet_20211218161746.pdf"
-#fileName = "score_sheet_20211218161800.pdf"
-#fileName = "score_sheet_20211218161818.pdf"
-#fileName = "score_sheet_20211218161829.pdf"
-getPDFInfo(fileName)
+    return -1
