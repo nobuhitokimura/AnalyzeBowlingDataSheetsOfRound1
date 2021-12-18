@@ -8,10 +8,10 @@ import itertools
 # 各カウントマークのPng情報
 cntCharName = []       # 各マークの名前
 cntCharPngDic = {}     # 各マークのPng配列
-cntCharPngPath = "../cntCharPng"
+cntCharPngPath = "./static/cntCharPng"
 
 # ゲームのpng画像があるフォルダパス
-picPath = "./pic"
+picPath = "./static/pdfPic"
 
 
 ###
@@ -59,6 +59,8 @@ def checkCount(threshImgCnt):
 ### 対象のゲームのPng画像のカウントを表示する関数
 ###
 def showCount(threshImg):
+    gameScore = {}
+    
     for i in range(21):
         upperL = 2 + i * 35 + i * 2
         lowerR = 36 + i * 35 + i * 2 + 1
@@ -68,15 +70,18 @@ def showCount(threshImg):
         maxKey, maxValue = checkCount(threshImgCnt)
 
         # 結果表示
-        if i == 20:
-            print("10-3 : ", end='')
+        if i == 20: #10フレ3投目
+            if isSplit(threshImgCnt):
+                gameScore['10-3'] = 'split ' + str(maxKey)
+            else:
+                gameScore['10-3'] = str(maxKey)
         else:
-            print(str(math.floor(i/2)+1) + '-' + str(i%2+1) + " : ", end='')
-
-        if isSplit(threshImgCnt):
-            print("split " + str(maxKey))
-        else:
-            print(str(maxKey))
+            key = str(math.floor(i/2)+1) + '-' + str(i%2+1)
+            if isSplit(threshImgCnt):
+                gameScore[key] = 'split ' + str(maxKey)
+            else:
+                gameScore[key] = str(maxKey)
+    return gameScore
 
 
 ###
@@ -156,28 +161,42 @@ def getGameScore(threshImg):
         # その他
         else:
             score = score + transGameCnt[2*i] + transGameCnt[2*i+1]
-    
-    print("score : " + str(score))
+    #print("score : " + str(score))
+    return str(score)
 
-# 各マーク画像の情報を取得
-readCntCharPng(cntCharPngPath)
 
-if os.path.isdir(picPath):
-    files = os.listdir(picPath)
-    for file in files:
-        # 各ゲームのpng画像のパスを生成
-        joinPicPath = os.path.join(picPath, file)
-        
-        # 画像を読み込み
-        img = cv2.imread(joinPicPath, 0)
-        # 二値化
-        threshold = 48
-        ret, threshImg = cv2.threshold(img, threshold, 255, cv2.THRESH_BINARY)
-        
+def getGameCount():
+    # 各マーク画像の情報を取得
+    readCntCharPng(cntCharPngPath)
 
-        # カウントを表示
-        print(joinPicPath)
-        #showCount(threshImg)
+    # pdfPicに画像が存在するかの判定
+    if os.path.isdir(picPath):
+        # 画像のファイル名を取得しソート
+        files = os.listdir(picPath)
+        files.sort()
 
-        # ゲームスコアを表示
-        getGameScore(threshImg)
+        gameCount = []  # ゲームカウント
+
+        # 各ゲームの画像に対してカウントを抽出
+        for file in files:
+            # 各ゲームのpng画像のパスを生成
+            joinPicPath = os.path.join(picPath, file)
+            
+            # 画像を読み込み
+            img = cv2.imread(joinPicPath, 0)
+            # 二値化
+            threshold = 48
+            ret, threshImg = cv2.threshold(img, threshold, 255, cv2.THRESH_BINARY)
+            
+            # カウントを取得
+            gameCountBuf = showCount(threshImg)
+            # ゲームスコアを取得
+            gameCountBuf['score'] = getGameScore(threshImg)
+            # ゲーム数(fileの拡張子なし名)を取得
+            gameCountBuf['gamenum'] = os.path.splitext(os.path.basename(file))[0]
+            # ゲームカウント配列に追加
+            gameCount.append(gameCountBuf)
+            # 画像を削除
+            os.remove(joinPicPath)
+        return gameCount
+    return -1

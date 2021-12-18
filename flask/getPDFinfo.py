@@ -8,12 +8,9 @@ import re
 ### PDFのテキスト情報および画像を取得する関数
 ###
 def getInfo(pdfFilePath):
-    # PDFのファイルパス
-    #pdfFilePath = "./static/pdf/" + fileName
     # PDfから取得した画像を格納するフォルダ
     pdfPicPath = "./static/pdfPic/"
-    #os.makedirs(dirPath, exist_ok=True)
-
+    
     # ファイルオープン
     with fitz.open(pdfFilePath) as scoreSheet:
         # 1ページごとに解析
