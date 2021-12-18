@@ -7,13 +7,10 @@ import re
 ###
 ### PDFのテキスト情報および画像を取得する関数
 ###
-def getPDFInfo(fileName):
-    # PDFのファイルパス
-    pdfFilePath = "./static/pdf/" + fileName
+def getInfo(pdfFilePath):
     # PDfから取得した画像を格納するフォルダ
     pdfPicPath = "./static/pdfPic/"
-    #os.makedirs(dirPath, exist_ok=True)
-
+    
     # ファイルオープン
     with fitz.open(pdfFilePath) as scoreSheet:
         # 1ページごとに解析
