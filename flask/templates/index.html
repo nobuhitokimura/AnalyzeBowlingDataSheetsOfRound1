@@ -9,9 +9,30 @@
         <link rel="stylesheet" href="static/css/style.css">
     </head>
     <body>
-		<h1>ボウリングのデータシート（ラウンドワン）</h1>
-		<p>Jinja2でHTMLファイルを読み込みことに成功しました。</p>
-        <p>{{ title }}{{framework}}{{mark}}でHTMLファイルを読み込みことに成功しました。</p>
+		<h1>{{ title }}</h1>
+        <p>{{ message }}</p>
+
+        <form action="/" method="POST" enctype="multipart/form-data">
+            <div>
+                <label for="r1">Python:</label>
+                <input type="radio" id="r1" name="progRadio" value="Python">
+            </div>
+            <div>
+                <label for="r2">Node.js:</label>
+                <input type="radio" id="r2" name="progRadio" value="Node.js">
+            </div>
+            <div>
+                <label for="r3">TypeScript:</label>
+                <input type="radio" id="r3" name="progRadio" value="TypeScript">
+            </div>
+            <div>
+                <label for="r4">JavaScript:</label>
+                <input type="radio" id="r4" name="progRadio" value="JavaScript">
+            </div>
+            <div>
+                <input type="submit" value="送信">
+            </div>
+        </form>
 
         <!-- Javascriptの読み込み -->
         <script src="static/js/script.js"></script>
