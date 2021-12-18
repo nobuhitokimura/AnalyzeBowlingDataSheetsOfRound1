@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
 import os
+import getPDFInfo
 
 app = Flask(__name__)
 # ファイルサイズ上限は、とりあえず2MB
@@ -25,6 +26,9 @@ def post():
     filepath = 'static/pdf/' + filename
     # ファイルを保存する
     f.save(filepath)
+
+    text = getPDFInfo.getInfo(filepath)
+    print(text)
 
     return render_template('index.html',
         title = 'ボウリングのデータシート（ラウンドワン）',

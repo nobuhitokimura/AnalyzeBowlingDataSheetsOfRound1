@@ -7,9 +7,9 @@ import re
 ###
 ### PDFのテキスト情報および画像を取得する関数
 ###
-def getPDFInfo(fileName):
+def getInfo(pdfFilePath):
     # PDFのファイルパス
-    pdfFilePath = "./static/pdf/" + fileName
+    #pdfFilePath = "./static/pdf/" + fileName
     # PDfから取得した画像を格納するフォルダ
     pdfPicPath = "./static/pdfPic/"
     #os.makedirs(dirPath, exist_ok=True)
