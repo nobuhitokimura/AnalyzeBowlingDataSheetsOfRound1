@@ -13,10 +13,10 @@ def get():
 # postのときの処理	
 @app.route('/', methods=['POST'])
 def post():
-	name = request.form.getlist('progCB')
+	name = request.form.get('sel')
 	return render_template('index.html', \
 		title = 'ボウリングのデータシート（ラウンドワン）', \
-		message = '{}をやれ'.format('と'.join(name)))
+		message = '{}をやれ'.format(name))
 
 if __name__ == '__main__':
 	app.run()

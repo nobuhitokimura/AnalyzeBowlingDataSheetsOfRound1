@@ -13,22 +13,13 @@
         <p>{{ message }}</p>
 
         <form action="/" method="POST" enctype="multipart/form-data">
-            <div>
-                <label for="cb1">Python:</label>
-                <input type="checkbox" id="cb1" name="progCB" value="Python">
-            </div>
-            <div>
-                <label for="cb2">Node.js:</label>
-                <input type="checkbox" id="cb2" name="progCB" value="Node.js">
-            </div>
-            <div>
-                <label for="cb3">TypeScript:</label>
-                <input type="checkbox" id="cb3" name="progCB" value="TypeScript">
-            </div>
-            <div>
-                <label for="cb4">JavaScript:</label>
-                <input type="checkbox" id="cb4" name="progCB" value="JavaScript">
-            </div>
+            <select name="sel">
+                <option value="null" disabled selected>選択してください</option>
+                <option value="Python">Python</option>
+                <option value="Node">Node</option>
+                <option value="TS">TS</option>
+                <option value="JS">JS</option>
+            </select>
             <div>
                 <input type="submit" value="送信">
             </div>
