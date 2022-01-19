@@ -1,4 +1,8 @@
-# AnalyzeBowlingDataSheetsOfRound1
+# AnalyzeBowlingDataSheetsOfRound1  
+
+## Dependency  
+Python 3.8.2  
+flask 2.0.2  
 
 ## Reference
 [1]『Flaskを『ローカルで開発する環境構築』から『プログラムの実行まで』を一通り』https://tanuhack.com/flask-local-ade/ (Accessed on 2021-11-13).  
