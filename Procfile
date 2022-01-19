@@ -1,1 +1,1 @@
-web: gunicorn Convert-Midi-Number:app --log-file -
+web: gunicorn app:app 
