@@ -1,7 +1,7 @@
 # AnalyzeBowlingDataSheetsOfRound1  
 
 ## Dependency  
-Python 3.8.2  
+Python 3.8.12  
 flask 2.0.2  
 
 ## Reference
