@@ -1,11 +1,5 @@
 __pycache__/
 
-
-# アップロードされたPDF
-static/pdf
-# 抽出した画像
-static/pdfPic
-
 ###
 ### Flask導入前
 ###
