@@ -1,9 +1,8 @@
 import os
-import cv2
 import numpy as np
 import math
 import itertools
-
+from PIL import Image
 
 # 各カウントマークのPng情報
 cntCharName = []       # 各マークの名前
@@ -25,8 +24,10 @@ def readCntCharPng(path):
             nameBuf = file.split('.')[0]
             cntCharName.append(nameBuf)
             # Png配列取得(キーは各マークの名前)
-            charImg = cv2.imread(path + '/' + file, 0)
+            # pillowライブラリで読み込み、グレースケールに変化し、数値化
+            charImg = np.array(Image.open(path + '/' + file).convert('L'))
             cntCharPngDic[nameBuf] = np.array(list(itertools.chain.from_iterable(charImg)))
+
 
 
 ###
@@ -183,11 +184,12 @@ def getGameCount():
             joinPicPath = os.path.join(picPath, file)
             
             # 画像を読み込み
-            img = cv2.imread(joinPicPath, 0)
+            img = np.array(Image.open(joinPicPath).convert('L'))
             # 二値化
             threshold = 48
-            ret, threshImg = cv2.threshold(img, threshold, 255, cv2.THRESH_BINARY)
-            
+            maxVal = 255            
+            threshImg = np.array((img > threshold) * maxVal, dtype=np.uint8)
+
             # カウントを取得
             gameCountBuf = showCount(threshImg)
             # ゲームスコアを取得
