@@ -27,6 +27,7 @@ def get():
 def post():
     # ファイルリクエストのパラメータを取得
     f = request.files.get('pdf')
+
     # ファイル名を取得
     fileName = secure_filename(f.filename)
     # ファイルを保存するパスを指定
@@ -34,7 +35,7 @@ def post():
     # ファイルを保存する
     f.save(filePath)
 
-    # PDFの情報抽出、画像抽出と保存
+    # PDFの情報抽出、画像抽出
     text = getInfo(filePath)
 
     # PDFは不要なので削除
@@ -52,15 +53,17 @@ def post():
 ###
 ### PDFのテキスト情報および画像を取得する関数
 ###
-def getInfo(pdfFilePath):
+def getInfo(filePath):
     # PDfから取得した画像を格納するフォルダ
     pdfPicPath = os.getcwd() + "/static/pdfPic/"
     
     # ファイルオープン
-    print(pdfFilePath)
-    with fitz.open(pdfFilePath) as scoreSheet:
+    with fitz.open(filePath) as scoreSheet:
         # 1ページごとに解析
+        print(scoreSheet)
+        print(type(scoreSheet))
         for i, page in enumerate(scoreSheet):
+        #for i, page in enumerate(f):
             # テキスト情報抽出
             infoList = []   # 1PDFのテキスト情報のリスト
             infoDic = {}    # 1ゲーム分のテキスト情報の辞書型
@@ -106,7 +109,6 @@ def getInfo(pdfFilePath):
                         ofh.write(x['image'])
 
             return infoList
-
     return -1
 
 
@@ -309,4 +311,4 @@ def getGameCount():
 
 
 if __name__ == '__main__':
-	app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+	app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
