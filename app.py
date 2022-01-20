@@ -14,6 +14,8 @@ app = Flask(__name__)
 # ファイルサイズ上限は、とりあえず2MB
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1000 * 1000
 
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+
 # getのときの処理
 @app.route('/', methods=['GET'])
 def get():
@@ -31,8 +33,8 @@ def post():
     # ファイル名を取得
     fileName = secure_filename(f.filename)
     # ファイルを保存するパスを指定
-    filePath = os.getcwd() + "/static/pdf/" + fileName
-    print("PATH ===== "filePath )
+    filePath = BASE_PATH + "/static/pdf/" + fileName
+    print("PATH ===== " + filePath )
     # ファイルを保存する
     f.save(filePath)
 
@@ -56,7 +58,7 @@ def post():
 ###
 def getInfo(filePath):
     # PDfから取得した画像を格納するフォルダ
-    pdfPicPath = os.getcwd() + "/static/pdfPic/"
+    pdfPicPath = BASE_PATH + "/static/pdfPic/"
     
     # ファイルオープン
     with fitz.open(filePath) as scoreSheet:
@@ -116,10 +118,10 @@ def getInfo(filePath):
 # 各カウントマークのPng情報
 cntCharName = []       # 各マークの名前
 cntCharPngDic = {}     # 各マークのPng配列
-cntCharPngPath = os.getcwd() + "/static/cntCharPng"
+cntCharPngPath = BASE_PATH + "/static/cntCharPng"
 
 # ゲームのpng画像があるフォルダパス
-picPath = os.getcwd() + "/static/pdfPic"
+picPath = BASE_PATH + "/static/pdfPic"
 
 
 ###
@@ -291,6 +293,9 @@ def getGameCount():
             joinPicPath = os.path.join(picPath, file)
             
             # 画像を読み込み
+            root, ext = os.path.splitext(joinPicPath)
+            if ext != ".png":
+                continue
             img = np.array(Image.open(joinPicPath).convert('L'))
             # 二値化
             threshold = 48
