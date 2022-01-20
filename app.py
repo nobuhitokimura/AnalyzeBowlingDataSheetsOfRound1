@@ -30,7 +30,7 @@ def post():
     # ファイル名を取得
     fileName = secure_filename(f.filename)
     # ファイルを保存するパスを指定
-    filePath = './static/pdf/' + fileName
+    filePath = os.getcwd() + "/static/pdf/" + fileName
     # ファイルを保存する
     f.save(filePath)
 
@@ -54,11 +54,10 @@ def post():
 ###
 def getInfo(pdfFilePath):
     # PDfから取得した画像を格納するフォルダ
-    pdfPicPath = "./static/pdfPic/"
+    pdfPicPath = os.getcwd() + "/static/pdfPic/"
     
     # ファイルオープン
-    pdfBuf = fitz.open(pdfFilePath)
-    with pdfBuf as scoreSheet:
+    with fitz.open(pdfFilePath) as scoreSheet:
         # 1ページごとに解析
         for i, page in enumerate(scoreSheet):
             # テキスト情報抽出
@@ -113,10 +112,10 @@ def getInfo(pdfFilePath):
 # 各カウントマークのPng情報
 cntCharName = []       # 各マークの名前
 cntCharPngDic = {}     # 各マークのPng配列
-cntCharPngPath = "./static/cntCharPng"
+cntCharPngPath = os.getcwd() + "/static/cntCharPng"
 
 # ゲームのpng画像があるフォルダパス
-picPath = "./static/pdfPic"
+picPath = os.getcwd() + "/static/pdfPic"
 
 
 ###
@@ -209,7 +208,6 @@ def getGameScore(threshImg):
     
     # missとgutterを0に変換し,数字を数値に変換
     transGameCnt = [0 if (cnt == 'miss' or cnt == 'gutter') else cnt if (cnt == 'strike' or cnt == 'spare' or cnt == 'none') else int(cnt) for cnt in gameCnt]
-    #print(transGameCnt)
 
     # スコア計算
     score = 0
@@ -268,7 +266,6 @@ def getGameScore(threshImg):
         # その他
         else:
             score = score + transGameCnt[2*i] + transGameCnt[2*i+1]
-    #print("score : " + str(score))
     return str(score)
 
 
