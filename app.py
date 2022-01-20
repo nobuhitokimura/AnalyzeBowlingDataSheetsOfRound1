@@ -57,7 +57,8 @@ def getInfo(pdfFilePath):
     pdfPicPath = "./static/pdfPic/"
     
     # ファイルオープン
-    with fitz.open(pdfFilePath) as scoreSheet:
+    pdfBuf = fitz.open(pdfFilePath)
+    with pdfBuf as scoreSheet:
         # 1ページごとに解析
         for i, page in enumerate(scoreSheet):
             # テキスト情報抽出
