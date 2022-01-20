@@ -32,6 +32,7 @@ def post():
     fileName = secure_filename(f.filename)
     # ファイルを保存するパスを指定
     filePath = os.getcwd() + "/static/pdf/" + fileName
+    print("PATH ===== "filePath )
     # ファイルを保存する
     f.save(filePath)
 
