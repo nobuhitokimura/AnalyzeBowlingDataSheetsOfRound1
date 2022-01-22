@@ -10,9 +10,15 @@
     </head>
 
     <body>
+        <!-- Javascriptの読み込み -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+        <script src="static/js/script.js"></script>
+
+        <!-- メイン -->
 		<h1>{{ title }}</h1>
         <p>{{ message }}</p>
         
+        <!-- PDF入力フォーム -->
         <form action="/" method="POST" enctype="multipart/form-data">
             <div>
                 <input type="file" name="pdf" accept="application/pdf" multiple="multiple" required>
@@ -22,10 +28,46 @@
             </div>
         </form>
 
+        <!-- ゲームスコア表示 -->
+        <div style="width:800px;">
+            <canvas id="mychart" width="200" height="100"></canvas>
+        </div>
+        <script>
+            var ctx = document.getElementById('mychart');
+            var myChart = new Chart(ctx, {
+              type: 'line',
+              data: {
+                labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                datasets: [{
+                  label: 'Red',
+                  data: [20, 35, 40, 30, 45, 35, 40],
+                  borderColor: '#f88',
+                }, {
+                  label: 'Green',
+                  data: [20, 15, 30, 25, 30, 40, 35],
+                  borderColor: '#484',
+                }, {
+                  label: 'Blue',
+                  data: [30, 25, 10, 5, 25, 30, 20],
+                  borderColor: '#48f',
+                }],
+              },
+              options: {
+                y: {
+                    min: 0,
+                    max: 300,
+                    ticks: {    
+                        stepSize: 30
+                    }
+                },
+              },
+            });
+        </script>
+
+
         <p>{{ result1 }}</p>
         <p>{{ result2 }}</p>
 
-        <!-- Javascriptの読み込み -->
-        <script src="static/js/script.js"></script>
+        
     </body>
 </html>
