@@ -102,7 +102,7 @@ def getGameScore(threshImg):
         gameCnt.append(maxKey)
     
     # missとgutterを0に変換し,数字を数値に変換
-    transGameCnt = [0 if (cnt == 'miss' or cnt == 'gutter') else cnt if (cnt == 'strike' or cnt == 'spare' or cnt == 'none') else int(cnt) for cnt in gameCnt]
+    transGameCnt = [0 if (cnt == 'miss' or cnt == 'gutter' or cnt == 'none') else cnt if (cnt == 'strike' or cnt == 'spare') else int(cnt) for cnt in gameCnt]
     #print(transGameCnt)
 
     # スコア計算
@@ -143,10 +143,11 @@ def getGameScore(threshImg):
                 # ターキー(9フレ)
                 if i == 8 and transGameCnt[2*(i+1)+1] == 'strike':
                     score = score + 30
+                # ターキー
                 elif transGameCnt[2*(i+2)] == 'strike':
                     score = score + 30
                 else:
-                    score = score + 20 + transGameCnt[2*(i+2)]
+                    score = score + 20 + transGameCnt[2*(i+1)+1]
             # ストライクtoスペア
             elif transGameCnt[2*(i+1)+1] == 'spare':
                 score = score + 20

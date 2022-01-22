@@ -56,7 +56,8 @@ def post():
 
     return render_template('index.html',
         result1 = gameNum,
-        result2 = totalScores)
+        result2 = totalScores,
+        all = games)
 
 
 if __name__ == '__main__':

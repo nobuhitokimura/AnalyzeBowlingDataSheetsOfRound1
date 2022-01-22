@@ -28,7 +28,6 @@
             </div>
         </form>
 
-
         <!-- ゲームスコア表示 -->
         <div style="width:800px;">
             <canvas id="mychart" width="200" height="100"></canvas>
@@ -44,7 +43,7 @@
                     {% endfor %}
                 ],
                 datasets: [{
-                    label: 'Green',
+                    label: '日にち',
                     data: [
                         {% for rslt2 in result2 %}
                         {{ rslt2 }},
@@ -68,7 +67,7 @@
 
         <p>{{ result1 }}</p>
         <p>{{ result2 }}</p>
-
+        <p>{{ all }}</p>
         
     </body>
 </html>
