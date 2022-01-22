@@ -7,16 +7,16 @@
 
         <!-- cssの読み込み -->
         <link rel="stylesheet" href="static/css/style.css">
-    </head>
 
-    <body>
         <!-- Javascriptの読み込み -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
         <script src="static/js/script.js"></script>
+    </head>
 
+    <body>
         <!-- メイン -->
-		<h1>{{ title }}</h1>
-        <p>{{ message }}</p>
+		<h1> ボウリングのデータシート（ラウンドワン）</h1>
+        <p>データシートPDFをアップロードしてください。</p>
         
         <!-- PDF入力フォーム -->
         <form action="/" method="POST" enctype="multipart/form-data">
@@ -28,7 +28,7 @@
             </div>
         </form>
 
-        
+
         <!-- ゲームスコア表示 -->
         <div style="width:800px;">
             <canvas id="mychart" width="200" height="100"></canvas>
@@ -38,19 +38,19 @@
             var myChart = new Chart(ctx, {
               type: 'line',
               data: {
-                labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                labels: [
+                    {% for rslt1 in result1 %}
+                    "{{ rslt1 }}",
+                    {% endfor %}
+                ],
                 datasets: [{
-                  label: 'Red',
-                  data: [20, 35, 40, 30, 45, 35, 40],
-                  borderColor: '#f88',
-                }, {
-                  label: 'Green',
-                  data: [20, 15, 30, 25, 30, 40, 35],
-                  borderColor: '#484',
-                }, {
-                  label: 'Blue',
-                  data: [30, 25, 10, 5, 25, 30, 20],
-                  borderColor: '#48f',
+                    label: 'Green',
+                    data: [
+                        {% for rslt2 in result2 %}
+                        {{ rslt2 }},
+                        {% endfor %}
+                    ],
+                    borderColor: '#484',
                 }],
               },
               options: {
@@ -58,7 +58,7 @@
                     min: 0,
                     max: 300,
                     ticks: {    
-                        stepSize: 30
+                        stepSize: 50
                     }
                 },
               },

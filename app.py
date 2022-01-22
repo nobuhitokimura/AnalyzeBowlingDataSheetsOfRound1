@@ -4,6 +4,7 @@ from werkzeug.utils import secure_filename
 import os
 import getPDFInfo
 import getCount
+import organizeData
 
 app = Flask(__name__)
 # ファイルサイズ上限は、とりあえず10MB
@@ -15,8 +16,6 @@ BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 @app.route('/', methods=['GET'])
 def get():
 	return render_template('index.html',
-		title = 'ボウリングのデータシート（ラウンドワン）',
-		message = 'データシートPDFを1つアップロードしてください',
         result1 = '',
         result2 = '')
 
@@ -49,12 +48,15 @@ def post():
 
         texts.append(text)
         games.append(game)
+        
+    # ゲーム番号のみ取得
+    gameNum = organizeData.getGameNum(texts)
+    # スコアのみ取得
+    totalScores = organizeData.getTotalScores(games)
 
     return render_template('index.html',
-        title = 'ボウリングのデータシート（ラウンドワン）',
-		message = '',
-        result1 = texts,
-        result2 = games)
+        result1 = gameNum,
+        result2 = totalScores)
 
 
 if __name__ == '__main__':
