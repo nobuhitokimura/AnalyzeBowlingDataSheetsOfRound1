@@ -2,7 +2,7 @@
 
 ## Dependency  
 Python 3.8.12  
-Flask 2.0.2
+Flask 2.0.2  
 chart.js 3.7.0
 
 ## Reference
