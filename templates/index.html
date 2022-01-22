@@ -12,16 +12,18 @@
     <body>
 		<h1>{{ title }}</h1>
         <p>{{ message }}</p>
-        <p>{{ message2 }}</p>
-
+        
         <form action="/" method="POST" enctype="multipart/form-data">
             <div>
-                <input type="file" name="pdf" accept="application/pdf" required>
+                <input type="file" name="pdf" accept="application/pdf" multiple="multiple" required>
             </div>
             <div>
                 <input type="submit" value="送信">
             </div>
         </form>
+
+        <p>{{ result1 }}</p>
+        <p>{{ result2 }}</p>
 
         <!-- Javascriptの読み込み -->
         <script src="static/js/script.js"></script>
