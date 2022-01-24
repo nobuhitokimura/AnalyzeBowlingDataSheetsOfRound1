@@ -2,8 +2,16 @@ body {
     background: #F4E7D3;
 }
 h1 {
+    margin : 10px;
     color: #B01335;
 }
 p {
+    margin : 10px;
     color: #1F4E5F;
+}
+div {
+    margin : 20px;
+}
+.Form {
+    margin : 10px;
 }

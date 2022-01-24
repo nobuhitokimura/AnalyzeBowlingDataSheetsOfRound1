@@ -33,7 +33,6 @@ def post():
         fileName = secure_filename(f.filename)
         # ファイルを保存するパスを指定
         filePath = BASE_PATH + "/static/pdf/" + fileName
-        print("PATH ===== " + filePath )
         # ファイルを保存する
         f.save(filePath)
 
@@ -49,16 +48,14 @@ def post():
         texts.append(text)
         games.append(game)
         
-    # ゲーム番号のみ取得
-    #gameNum = organizeData.getGameNum(texts)
-    # スコアのみ取得
-    #totalScores = organizeData.getTotalScores(games)
     # ゲーム番号とスコアをソートして取得
     gameNum, totalScores = organizeData.getGameNumAndTotalScores(games)
+    gameIndex = organizeData.getGameIndex(games)
 
     return render_template('index.html',
         result1 = gameNum,
         result2 = totalScores,
+        result3 = gameIndex,
         all = games)
 
 
