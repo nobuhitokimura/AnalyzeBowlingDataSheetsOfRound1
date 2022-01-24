@@ -6,12 +6,11 @@
 
 ファイル選択ボタンを押し、ラウンドワンアプリからダウンロードしたスコアシートを選択してください。
 
-![figure1](image/figure1.jpg)
-<img src="image/figure1.jpg" width="320px">
+<img src="image/figure1.jpg" width="400px">
 
 その後、各ゲームごとの合計点の推移と、簡単な指標が表示されます。
 
-<img src="image/figure2.jpg" width="320px">
+<img src="image/figure2.jpg" width="400px">
 
 
 ## Requirement  
