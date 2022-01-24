@@ -17,7 +17,7 @@
 Python      3.8.12  
 Flask       2.0.2  
 Jinja2      3.0.3  
-Chart.js    3.7.0
+Chart.js    3.7.0  
 Bootstrap   v4.2
 
 ## Reference  
