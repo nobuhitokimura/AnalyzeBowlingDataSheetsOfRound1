@@ -1,6 +1,5 @@
 import os
 import fitz
-import copy
 import re
 
 

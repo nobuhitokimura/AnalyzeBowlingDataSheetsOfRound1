@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import math
+import copy
 import itertools
 from PIL import Image
 
@@ -86,85 +87,114 @@ def showCount(threshImg):
 
 
 ###
-### ゲームスコアを取得する関数
+### ゲームの合計スコアを取得する関数
 ###
-def getGameScore(threshImg):
-    # 1フレから10フレまでの各カウント
-    gameCnt = []
+def getTotalScore(frameScore):
+    tarFrameScore = copy.copy(frameScore)
 
-    for i in range(21):
-        upperL = 2 + i * 35 + i * 2
-        lowerR = 36 + i * 35 + i * 2 + 1
-        threshImgCnt = threshImg[34:70, upperL:lowerR]
-
-        # カウントの値を取得
-        maxKey, maxValue = checkCount(threshImgCnt)
-        gameCnt.append(maxKey)
-    
-    # missとgutterを0に変換し,数字を数値に変換
-    transGameCnt = [0 if (cnt == 'miss' or cnt == 'gutter' or cnt == 'none') else cnt if (cnt == 'strike' or cnt == 'spare') else int(cnt) for cnt in gameCnt]
-    #print(transGameCnt)
-
-    # スコア計算
-    score = 0
-    for i in range(10):
-        # 10フレ
-        if i == 9:
-            # ストライク
-            if transGameCnt[2*i] == 'strike':
-                # ストライクtoストライク
-                if transGameCnt[2*i+1] == 'strike':
-                    # パンチアウト
-                    if transGameCnt[2*i+2] == 'strike':
-                        score = score + 30
-                    else:
-                        score = score + 20 + transGameCnt[2*i+2]
-                # ストライクtoスペア
-                elif transGameCnt[2*i+2] == 'spare':
-                    score = score + 20
-                else:
-                    score = score + 10 + transGameCnt[2*i+1] + transGameCnt[2*i+2]
-            # スペア
-            elif transGameCnt[2*i+1] == 'spare':
-                #スペアtoストライク
-                if transGameCnt[2*i+2] == 'strike':
-                    score = score + 20
-                else:
-                    score = score + 10 + transGameCnt[2*i+2]
-            # その他
-            else:
-                score = score + transGameCnt[2*i] + transGameCnt[2*i+1]
-            continue
-
+    totalScore = 0  # 合計点
+    score, next1, next2 = 0, 0, 0   # フレームの合計点、1投先の倒した本数、2投先の倒した本数
+    while len(tarFrameScore) > 0:
+        # 後ろのフレームから計算
+        frame = tarFrameScore.pop(-1) # 最後のフレームを取り出し
+        score = sum(frame)
+        # 10フレでパンチアウト、ストライク、スペア
+        if len(frame) == 3:
+            totalScore += score
+            next1 = frame[0]
+            next2 = frame[1]
         # ストライク
-        if transGameCnt[2*i] == 'strike':
-            # ダブル
-            if transGameCnt[2*(i+1)] == 'strike':
-                # ターキー(9フレ)
-                if i == 8 and transGameCnt[2*(i+1)+1] == 'strike':
-                    score = score + 30
-                # ターキー
-                elif transGameCnt[2*(i+2)] == 'strike':
-                    score = score + 30
-                else:
-                    score = score + 20 + transGameCnt[2*(i+1)+1]
-            # ストライクtoスペア
-            elif transGameCnt[2*(i+1)+1] == 'spare':
-                score = score + 20
-            else:
-                score = score + 10 + transGameCnt[2*(i+1)] + transGameCnt[2*(i+1)+1]
+        elif len(frame) == 1:
+            totalScore += 10 + next1 + next2
+            next2 = next1
+            next1 = 10
         # スペア
-        elif transGameCnt[2*i+1] == 'spare':
-            # スペアtoストライク
-            if transGameCnt[2*(i+1)] == 'strike':
-                score = score + 20
-            else:
-                score = score + 10 + transGameCnt[2*(i+1)]
-        # その他
+        elif score == 10:
+            totalScore += 10 + next1
+            next1 = frame[0]
+            next2 = frame[1]
+        # その他は倒した本数
         else:
-            score = score + transGameCnt[2*i] + transGameCnt[2*i+1]
-    #print("score : " + str(score))
-    return str(score)
+            totalScore += score
+            next1 = frame[0]
+            next2 = frame[1]
+    return totalScore
+
+
+###
+### フレームと投目の結果のリストを倒した本数の配列に変換する関数
+###
+def toFrameScore(gameCountDic):
+    frameScore = []
+    scoreBuf = []
+
+    for cKey, cVal in gameCountDic.items():
+        # 10フレームのみ別の処理
+        if cKey[1] == '0':
+            # 1投目
+            if cKey[-1] == '1':
+                # ストライク
+                if cVal == 'strike':
+                    scoreBuf.append(10)
+                # ガター
+                elif cVal == 'gutter':
+                    scoreBuf.append(0)
+                # その他は倒した本数(split用に-1番目を参照)
+                else:
+                    scoreBuf.append(int(cVal[-1]))
+            # 2, 3投目
+            else:
+                # ストライク
+                if cVal == 'strike':
+                    scoreBuf.append(10)
+                # スペア(2, 3投目それぞれで参照する配列が1つずれるため)
+                elif cVal == 'spare':
+                    scoreBuf.append(10 - scoreBuf[int(cKey[-1]) - 2])
+                # ミス
+                elif cVal == 'miss':
+                    scoreBuf.append(0)
+                # noneの場合は何もしない
+                elif cVal == 'none':
+                    pass
+                # その他は倒した本数(split用に-1番目を参照)
+                else:
+                    scoreBuf.append(int(cVal[-1]))
+    
+                # 3投目(投げてない時も含める)
+                if cKey[-1] == '3':
+                    frameScore.append(scoreBuf)
+                    scoreBuf = []
+
+        else:
+            # 1投目
+            if cKey[-1] == '1':
+                # ストライク
+                if cVal == 'strike':
+                    scoreBuf.append(10)
+                # ガター
+                elif cVal == 'gutter':
+                    scoreBuf.append(0)
+                # その他は倒した本数(split用に-1番目を参照)
+                else:
+                    scoreBuf.append(int(cVal[-1]))
+            # 2投目
+            else:
+                # 1投目がストライクの場合
+                if scoreBuf[0] == 10:
+                    pass    
+                # スペアを取った場合
+                elif cVal == 'spare':
+                    scoreBuf.append(10 - scoreBuf[0])
+                # missの場合
+                elif cVal == 'miss':
+                    scoreBuf.append(0)
+                # その他は倒した本数
+                else:
+                    scoreBuf.append(int(cVal))
+
+                frameScore.append(scoreBuf)
+                scoreBuf = []
+    return frameScore
 
 
 def getGameCount():
@@ -178,7 +208,7 @@ def getGameCount():
         files.sort()
 
         gameCount = []  # ゲームカウント
-
+        
         # 各ゲームの画像に対してカウントを抽出
         for file in files:
             # 各ゲームのpng画像のパスを生成
@@ -191,15 +221,20 @@ def getGameCount():
             maxVal = 255            
             threshImg = np.array((img > threshold) * maxVal, dtype=np.uint8)
 
-            # カウントを取得
-            gameCountBuf = showCount(threshImg)
+            # 各フレームのカウントを取得
+            gameCountBuf = {}
+            gameCountDic = showCount(threshImg)
+            gameCountBuf['frameInfo'] = gameCountDic
+            # 各フレームのカウントを倒したピンに変換
+            gameCountBuf['frameScore'] = toFrameScore(gameCountDic)
             # ゲームスコアを取得
-            gameCountBuf['score'] = getGameScore(threshImg)
+            gameCountBuf['score'] = getTotalScore(gameCountBuf['frameScore'])
             # ゲーム数(fileの拡張子なし名)を取得
-            gameCountBuf['gamenum'] = os.path.splitext(os.path.basename(file))[0]
+            gameCountBuf['gamenum'] = int(os.path.splitext(os.path.basename(file))[0])
             # ゲームカウント配列に追加
             gameCount.append(gameCountBuf)
             # 画像を削除
             os.remove(joinPicPath)
         return gameCount
     return -1
+
