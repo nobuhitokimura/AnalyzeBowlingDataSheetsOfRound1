@@ -1,23 +1,21 @@
 ###
-### ゲーム番号を取得する関数
+### ゲームの番号とスコアをソート（ゲーム番号順）して取得
 ###
-def getGameNum(texts):
-    gameNum = []
-    for text in texts:
-        for t in text:
-            gameNum.append(t['gamenum'])
-    return gameNum
-
-
-###
-### ゲームの合計点を取得する関数
-###
-def getTotalScores(games):
-    totalScores = []
+def getGameNumAndTotalScores(games):
+    # ゲーム番号とスコアのみを取得
+    gameNumScoresDic = {}
     for game in games:
         for g in game:
-            totalScores.append(int(g['score']))
-    return totalScores
+            gameNumScoresDic[g['gamenum']] = g['score']
+
+    # ソートしてゲーム番号とスコアをそれぞれ取得
+    gameNum = []        # ゲーム番号
+    totalScores = []    # スコア
+    for gVal in sorted(gameNumScoresDic.items()):
+        gameNum.append(gVal[0])
+        totalScores.append(gVal[1])
+
+    return gameNum, totalScores
 
 
 ###
@@ -58,6 +56,3 @@ def getMarks():
             cnt += 10   # 各ゲームごとに10投分加算
 
     print(marksDic)
-    
-
-getMarks()

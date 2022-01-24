@@ -50,9 +50,11 @@ def post():
         games.append(game)
         
     # ゲーム番号のみ取得
-    gameNum = organizeData.getGameNum(texts)
+    #gameNum = organizeData.getGameNum(texts)
     # スコアのみ取得
-    totalScores = organizeData.getTotalScores(games)
+    #totalScores = organizeData.getTotalScores(games)
+    # ゲーム番号とスコアをソートして取得
+    gameNum, totalScores = organizeData.getGameNumAndTotalScores(games)
 
     return render_template('index.html',
         result1 = gameNum,
