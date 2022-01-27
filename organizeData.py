@@ -27,18 +27,26 @@ def getGameIndex(games):
     gameSum = 0     # ゲーム数
     throwSum = 0    # 投球数
     scoreSum = 0    # 合計スコア
+    highScore = 0   # ハイスコア
 
     # 抽出
     for game in games:
         for g in game:
+            # ゲーム数カウント
             gameSum += 1
+            # 投球数を加算
             throwSum += sum(len(s) for s in g['frameScore'])
-            scoreSum += g['score']
+            # ゲームスコアを加算し、ハイスコアなら記録
+            scoreBuf = g['score']
+            scoreSum += scoreBuf
+            highScore = scoreBuf if scoreBuf > highScore else highScore
 
     gameIndex.append(["ゲーム数", gameSum])
     gameIndex.append(["投球数", throwSum])
     gameIndex.append(["合計スコア", scoreSum])
+    gameIndex.append(["ハイスコア", highScore])
     gameIndex.append(["アベレージ", float('{:.1f}'.format(scoreSum / gameSum))])
+    
     
     return gameIndex
 
