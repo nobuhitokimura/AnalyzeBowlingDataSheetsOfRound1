@@ -50,12 +50,13 @@ def post():
         
     # ゲーム番号とスコアをソートして取得
     gameNum, totalScores = organizeData.getGameNumAndTotalScores(games)
+    print(games)
     gameIndex = organizeData.getGameIndex(games)
 
     return render_template('index.html',
-        result1 = gameNum,
-        result2 = totalScores,
-        result3 = gameIndex,
+        gameLabel = gameNum,
+        totalScores = totalScores,
+        gameIndex = gameIndex,
         all = games)
 
 
