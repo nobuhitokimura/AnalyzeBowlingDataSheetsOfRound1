@@ -129,6 +129,7 @@ def toFrameScore(gameCountDic):
     scoreBuf = []
 
     for cKey, cVal in gameCountDic.items():
+        print(cKey, cVal)
         # 10フレームのみ別の処理
         if cKey[1] == '0':
             # 1投目
@@ -152,6 +153,9 @@ def toFrameScore(gameCountDic):
                     scoreBuf.append(10 - scoreBuf[int(cKey[-1]) - 2])
                 # ミス
                 elif cVal == 'miss':
+                    scoreBuf.append(0)
+                # ガター
+                elif cVal == 'gutter':
                     scoreBuf.append(0)
                 # noneの場合は何もしない
                 elif cVal == 'none':
